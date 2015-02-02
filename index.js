@@ -84,16 +84,23 @@ Consumer.prototype._handleSqsResponse = function (err, response) {
 
   debug('Received SQS response');
   debug(response);
+	
 
+	 // poll quickly
+  this._poll();
+  
   if (response && response.Messages && response.Messages.length > 0) {
     async.each(response.Messages, this._processMessage.bind(this), function () {
       // start polling again once all of the messages have been processed
-      consumer._poll();
+     // consumer._poll();
     });
   } else {
     // there were no messages, so start polling again
-    this._poll();
+    //this._poll();
   }
+  
+ 
+  
 };
 
 Consumer.prototype._processMessage = function (message, cb) {
